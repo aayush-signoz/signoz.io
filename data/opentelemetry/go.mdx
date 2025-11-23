@@ -530,7 +530,7 @@ You can also visualize your tracing data with the help of [**flamegraphs and Ga
 
 ## Adding custom attributes and custom events to spans
 
-In OpenTelemetry, [spans](https://signoz.io/blog/distributed-tracing-span/) represent a single unit of work in a distributed trace. You can enrich these spans with **custom attributes** and **custom events** to capture additional context and insights about the operations your application is performing. This is useful for observability and debugging, as it allows you to track specific details in the trace, providing more valuable insights into your system's behavior.
+In OpenTelemetry, [**spans**](https://signoz.io/blog/distributed-tracing-span/) represent a single unit of work in a distributed trace. You can enrich these spans with **custom attributes** and **custom events** to capture additional context and insights about the operations your application is performing. This is useful for observability and debugging, as it allows you to track specific details in the trace, providing more valuable insights into your system's behavior.
 
 Here’s how you can add **custom attributes** and **custom events** to spans in your Go application:
 
@@ -732,12 +732,12 @@ func DeleteBook(c *gin.Context) {
 Once you've updated your application, restart it and generate new telemetry data. Then, navigate to your SigNoz cloud account and select one of the traces. You should be able to see the custom attributes and events that you've added. These will provide more insights into the activities taking place within your application, improving the observability and debugging process.
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/custom-attributes.webp" alt="Custom attributes"/>
+<img src="https://signoz.io/img/blog/2025/11/custom-attributes.webp" alt="Custom attributes"/>
 <figcaption><i>Custom attributes can seen under **`Attributes`** section on SigNoz trace detail page</i></figcaption>
 </figure>
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/events.webp" alt="Events"/>
+<img src="https://signoz.io/img/blog/2025/11/events.webp" alt="Events"/>
 <figcaption><i>Events can be seen under **`Events`** section on SigNoz trace detail page</i></figcaption>
 </figure>
 
