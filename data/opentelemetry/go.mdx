@@ -11,7 +11,7 @@ keywords: [opentelemetry, opentelemetry golang, opentelemetry go, distributed tr
 **[OpenTelemetry](https://opentelemetry.io/)** is an open-source observability framework that generates and collects telemetry data (logs, metrics, and traces) from applications and services built in **[different languages or technology stacks](https://opentelemetry.io/docs/languages/)**. OpenTelemetry gives a simple and consistent way to instrument application code and capture the signals needed to understand what’s really happening in a system, abstracting the effort of juggling different vendor-specific agents or custom libraries for every environment. Once data is collected, it can be exported to any compatible backend or observability platform for storage, visualisation, and analysis.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2024/12/opentelemetry-golang-cover.webp" alt="Monitor your Go applications with SigNoz"/>
+<img src="/img/blog/2024/12/opentelemetry-golang-cover.webp" alt="Monitor your Go applications with SigNoz"/>
 </figure>
 
 Modern Golang applications run inside distributed systems with multiple microservices, containers, serverless functions, background workers, and event-driven pipelines. As this complexity grows, even simple troubleshooting like below becomes challenging:
@@ -448,7 +448,7 @@ SigNoz cloud is the easiest way to run SigNoz. You can sign up [**here**](https
 After you sign up and verify your email, you will be provided with details of your SigNoz cloud instance. Once you set up your password and log in, you will be greeted with the following onboarding screen.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/opentelemetry/2024/06/onboarding-screen.webp" alt="Onboarding screen in SigNoz"/>
+<img src="/img/opentelemetry/2024/06/onboarding-screen.webp" alt="Onboarding screen in SigNoz"/>
 <figcaption><i>Onboarding screen in SigNoz</i></figcaption>
 </figure>
 
@@ -457,14 +457,14 @@ Since we will be following instructions from the tutorial, you can skip onboardi
 You will see the below screen:
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2024/12/services-tab.webp" alt="Services tab in SigNoz"/>
+<img src="/img/blog/2024/12/services-tab.webp" alt="Services tab in SigNoz"/>
 <figcaption><i>Services tab in SigNoz</i></figcaption>
 </figure>
 
 For sending data to SigNoz cloud, you will be needing details like ingestion key and region. You can find them under **`Ingestion Settings`** under **`Settings`**.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2024/12/ingestion-settings.webp" alt="ingestion settings"/>
+<img src="/img/blog/2024/12/ingestion-settings.webp" alt="ingestion settings"/>
 <figcaption><i>Ingestion details for your SigNoz cloud account</i></figcaption>
 </figure>
 
@@ -499,7 +499,7 @@ The script performs a repeated sequence of CRUD operations on the **`/books`** A
 Navigate to our SigNoz cloud account. On the service page, you should see your **`goApp`** service.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/services-tab-go.webp" alt="Go app being monitored under services tab"/>
+<img src="/img/blog/2025/11/services-tab-go.webp" alt="Go app being monitored under services tab"/>
 <figcaption><i>Your Go Gin application being monitored on the SigNoz dashboard</i></figcaption>
 </figure>
 
@@ -508,7 +508,7 @@ You can monitor application metrics like application latency, requests per secon
 Click on the **`goApp`** service and you should be redirected to the metrics page.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/metrics-page-go.webp" alt="Metrics from Go app"/>
+<img src="/img/blog/2025/11/metrics-page-go.webp" alt="Metrics from Go app"/>
 <figcaption><i>Monitor your Go Gin application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
 </figure>
 
@@ -517,20 +517,20 @@ OpenTelemetry captures tracing data from your Gin application as well. Tracing d
 In the **`Traces`** tab of SigNoz, you can analyze the tracing data using filters based on tags, status codes, service names, operations, etc.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/traces-tab-go.webp" alt="Traces tab"/>
+<img src="/img/blog/2025/11/traces-tab-go.webp" alt="Traces tab"/>
 <figcaption><i>Use powerful filters to analyze your tracing data from the Gin application</i></figcaption>
 </figure>
 
 You can also visualize your tracing data with the help of [**flamegraphs and Gantt charts**](https://signoz.io/blog/flamegraphs/).
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/flamegraphs-go.webp" alt="Flamegraphs and Gantt charts visualization"/>
+<img src="/img/blog/2025/11/flamegraphs-go.webp" alt="Flamegraphs and Gantt charts visualization"/>
 <figcaption><i>Flamegraphs and Gantt charts on SigNoz dashboard</i></figcaption>
 </figure>
 
 ## Adding custom attributes and custom events to spans
 
-In OpenTelemetry, [**spans**](https://signoz.io/blog/distributed-tracing-span/) represent a single unit of work in a distributed trace. You can enrich these spans with **custom attributes** and **custom events** to capture additional context and insights about the operations your application is performing. This is useful for observability and debugging, as it allows you to track specific details in the trace, providing more valuable insights into your system's behavior.
+In OpenTelemetry, [**spans**](/blog/distributed-tracing-span/) represent a single unit of work in a distributed trace. You can enrich these spans with **custom attributes** and **custom events** to capture additional context and insights about the operations your application is performing. This is useful for observability and debugging, as it allows you to track specific details in the trace, providing more valuable insights into your system's behavior.
 
 Here’s how you can add **custom attributes** and **custom events** to spans in your Go application:
 
@@ -732,12 +732,12 @@ func DeleteBook(c *gin.Context) {
 Once you've updated your application, restart it and generate new telemetry data. Then, navigate to your SigNoz cloud account and select one of the traces. You should be able to see the custom attributes and events that you've added. These will provide more insights into the activities taking place within your application, improving the observability and debugging process.
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/custom-attributes.webp" alt="Custom attributes"/>
+<img src="/img/blog/2025/11/custom-attributes.webp" alt="Custom attributes"/>
 <figcaption><i>Custom attributes can seen under **`Attributes`** section on SigNoz trace detail page</i></figcaption>
 </figure>
 
 <figure data-zoomable align='center'>
-<img src="https://signoz.io/img/blog/2025/11/events.webp" alt="Events"/>
+<img src="/img/blog/2025/11/events.webp" alt="Events"/>
 <figcaption><i>Events can be seen under **`Events`** section on SigNoz trace detail page</i></figcaption>
 </figure>
 
