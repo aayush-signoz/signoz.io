@@ -1,0 +1,41 @@
+---
+title: Monitor Golang Applications
+slug: golang-monitoring
+date: 2025-11-26
+tags: [Go / Golang, Golang Monitoring / Go Monitoring, OpenTelemetry Instrumentation]
+authors: [aayush_sharma]
+description: In this article, learn how to monitor golang applications using Opentelemetry and SigNoz.
+image: /img/blog/2021/06/golang_app_monitoring_cover_hc.webp
+keywords: [go application monitoring, opentelemetry, golang monitoring, opentelemetry go, go app, golang]
+---
+
+Go(Golang) applications are known for their performance, concurrency model, and efficient use of resources, making Go a easy pick to buid modern distributed systems. Effective monitoring of a Go application means understanding how goroutines behave under load, how the runtime allocates memory, how long API calls take, and how external dependencies such as databases or caches influence performance.
+
+Go concurrency-driven runtime can behave in surprising ways causing uncommon failures like degrading performance quietly over time. This is why certain Go-specific runtime metrics matter so much:
+- `Goroutines`: Lightweight concurrent routines in Go. Leaked or excessive goroutines increase memory consumption and impose additional load on the scheduler.
+- `Channels & concurrency`: Mismanagement of channels or synchronization primitives can lead to blocked goroutines or deadlocks, affecting throughput.
+- `Garbage collection`: Go’s automatic memory management can introduce pause times. Even minor GC events can influence tail latency and request consistency.
+- `Heap allocations`: Frequent or large memory allocations amplify GC pressure, potentially degrading latency and throughput.
+- `CPU & scheduler behavior`: Observing contention and scheduling delays provides insight into runtime-level bottlenecks that may not surface in high-level metrics.
+
+Monitoring these aspects is the only way to truly see inside a Go application rather than simply watching externals like CPU or average latency.
+
+<figure data-zoomable align='center'>
+    <img src="/img/blog/2021/06/golang_app_monitoring_cover_hc.webp" alt="Monitor your Go applications with SigNoz"/>
+</figure>
+
+**But here’s the real question:**
+What is the best way to monitor a Golang application? Not just at the surface, but at a level where you actually understand what’s happening inside the runtime?
+
+There is no perfect answer to above question considering different use-cases in different environments, but you could not just rely on simple logging, or use closed APM agents. These approaches might show you CPU usage or average response times, but they rarely give a full picture. They usually miss critical internal behaviors like where a request spends time, where goroutines are being blocked, how long database queries wait, or how downstream calls affect latency. In modern distributed environments and microservices especially, these deeper insights make all the difference.
+
+This is where [OpenTelemetry](https://signoz.io/opentelemetry/) delivers meaningful value. OpenTelemetry allows you to instrument Go applications in a vendor-neutral way, capturing logs, metrics, and traces right from both the runtime and your code. You can then visualize and analyze this data by connecting to a observability backend, so you can actually explore how requests flow, find bottlenecks, observe trends, and understand how the Go runtime behaves under real workloads.
+
+## Prerequisites
+
+- **[Go installed (v1.20+)](https://go.dev/doc/install)**: Required to build and run the Go application.
+- **[Git installed](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)**: Needed to clone the sample repository.
+- **[SQLite installed](https://www.sqlite.org/download.html)**: The sample app uses SQLite as its database.
+- **[Redis installed](https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/)** *(optional but recommended)*: Enables caching and helps demonstrate Redis monitoring.
+
+## Setting Up Monitoring in Go Application
