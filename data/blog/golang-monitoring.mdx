@@ -9,69 +9,18 @@ image: /img/blog/2021/06/golang_app_monitoring_cover_hc.webp
 keywords: [go application monitoring, opentelemetry, golang monitoring, opentelemetry go, go app, golang]
 ---
 
-Go (Golang) applications are known for their performance, concurrency model, and efficient use of resources, making Go an easy pick to build modern distributed systems. Effective monitoring of a Go application means understanding how goroutines behave under load, how the runtime allocates memory, how long API calls take, and how external dependencies such as databases or caches influence performance.
+Golang(Go) applications are known for their high performance, concurrency model, and efficient use of resources. making Go an easy pick to build modern distributed systems. Effective monitoring of a Go application means understanding the internals of a Go application such as:
+- How goroutines behave under load? 
+- How the runtime allocates memory? 
+- How long API calls take? 
+- How external dependencies such as databases or caches influence performance?
 
-## Key Points to Monitor in Golang Setup
-Go applications have unique runtime behaviours due to their concurrency model, and understanding these behaviours is key to effective monitoring. In this article we have covered a few important metrics that can help you get started with setting up monitoring in your Golang applications, such as the following:
-- `Goroutines`: Represents the current number threads managed by the Go runtime.
-- `Heap Memory Usage`: Reflects the number of bytes currently allocated on the Go heap, showing how much application memory is actively in use and needs garbage collection management.
-- `Request Latency & Throughput`: Latency measures how long a request takes to complete and throughput measures how many requests are processed over time. Together indicating service responsiveness and load capacity.
-- `Business-Level Metrics`: These represent application-specific events (e.g., orders created or per-product order volume), quantifying real user actions and business activity rather than just system performance.
-- `Tracing & Structured Logging`: Traces show the execution path of a request across functions and services, while structured logs provide contextual log data enriched with identifiers like trace IDs and span IDs.
+## Monitoring Approaches in Go and Where They Fall Short
+There are a mix of approaches through which you can monitor a Go application such as logs, CPU and memory metrics, garbage collection data, exported application metrics, distributed tracing, and profiling through tools like `pprof`. Each method offers a different perspective on application health and performance, and it’s common for teams to combine them depending on their needs.
 
-While the above metrics provide a solid foundation, there are additional signals you can explore depending on your setup requirements:
-- `Garbage Collection Pause Times`: See how garbage collection pauses affect your application’s response time.
-- `Object Allocation Rates`: Measure memory allocation patterns to identify hotspots and reduce garbage collection pressure.
-- `Stack Growth`: Monitor goroutine stack expansion to catch excessive memory usage.
-- `GOMAXPROCS`: Observe the number of OS threads Go can use concurrently for potential CPU under-utilization.
-- `Panic and Error Counts`: Track unexpected crashes and internal errors for early detection of reliability issues.
-- `Database & External Service Latency`: Monitor downstream dependencies like SQL queries, Redis, or third-party APIs.
-- `CPU Usage`: Measure system-level compute consumption beyond Go runtime metrics.
-- `RSS, Disk & Network I/O`: Understand container or VM-level resource pressure that could affect performance.
-- `Profiling Endpoints`: Use `/debug/pprof` to capture CPU, memory, and goroutine profiles for deeper analysis.
+[Prometheus](https://signoz.io/guides/how-does-prometheus-work/) is another and one of the most common approaches to monitor Go applications, With [surveys](https://go.dev/blog/survey2023-h2-results?utm_source=chatgpt.com) showing that a majority of Go services in production rely on Prometheus for runtime and business-level metrics. It provides a simple and consistent model for metrics collection, exposes a standard `/metrics` endpoint, integrates with popular Go libraries, and works well with backend tools for visualisation. The main issue with Prometheus is that it mainly focuses on metrics and doesn’t handle distributed tracing or standardised logs as part of its core design and requires additional work to correlate signals across different telemetry sources. 
 
-Monitoring these internal behaviours provides a deeper understanding of your Go application, going beyond standard surface-level metrics like CPU or latency and offering actionable insights into runtime performance, request behaviours, resource usage, and business events.
-
-## Real Question: Best Way to Monitor Golang Applications?
-There is no perfect answer to this question considering there are multiple ways to monitor Go services, and each provides different visibility into application health, runtime, and performance. Teams often evolve through these stages over time:
-- `Simple Logging`: Useful for recording events and errors within a single environment, but limited in connecting related requests from multiple services.
-- `System Monitoring`: Tracks resource usage at the host or container level, such as CPU consumption, memory usage, disk throughput, and network traffic.
-- `Go Profiling (pprof)`: Effective for detailed analysis during performance issues, as it provides low-level insight into CPU execution, goroutine scheduling, and more.
-- `Custom Metrics`: Allows developers to track domain-specific counters and values. Valuable for business insights, but consistency and standardization can be challenging across services.
-- `APM Agent Monitoring (Datadog, New Relic, AppDynamics)`: Provides automated instrumentation and dashboards, limited by proprietary integrations and lacks visibility into Go internals.
-- `Distributed Tracing (Jaeger, Zipkin)`: Makes it easier to observe how requests progress through components and services, revealing where processing time accumulates, though not inherently connected with metrics or logs.
-
-## A Standard in the Industry: Prometheus for Metrics
-Prometheus is widely used in Go applications for collecting numeric, timestamped metrics such as `counters`, `gauges`, and `histograms`. It works well for tracking the service state over time and is dependable for detecting issues like elevated error rates, memory growth, or request latency changes. For operational health monitoring, it answers questions like:
-- Is the service responding as expected?
-- Are failures increasing?
-- Is a threshold being crossed that requires attention?
-
-### Where Prometheus Falls Short?
-Prometheus helps you see what is happening inside a service, but not why it’s happening. It focuses on aggregated application metrics rather than request-level context. Examples:
-- You may see that garbage collection paused execution for several milliseconds, but not which inbound request triggered the spike.
-- You may observe higher Redis latency, but not which operation or endpoint caused the increase.
-- You may notice goroutine growth, but have no link to the specific code path or workload driving it.
-
-Prometheus is strong for detecting changes and trends in system and runtime indicators, but it does not provide the trace-driven causality that connects individual user requests to internal runtime behavior. Tools that incorporate tracing, such as OpenTelemetry paired with a compatible backend, allow you to follow execution flow and uncover source-level reasons for the metrics you observe.
-
-## OpenTelemetry(OTel): Foundation of Modern Monitoring
-[OpenTelemetry](https://signoz.io/opentelemetry/) provides a vendor-neutral framework to instrument Go applications, capturing logs, metrics, and traces from both your code and the runtime. This approach allows you to go beyond high-level metrics and understand how requests flow through the system, where time is spent, and how internal behaviours affect performance. By sending the collected data to an observability backend, you can visualize trends, identify bottlenecks, and correlate runtime events with specific requests. OpenTelemetry captures:
-
-- Traces with context propagation across services
-- Metrics that are compatible with Prometheus
-- Structured logs linked to trace context
-- Runtime-level insights such as garbage collection, heap usage, and scheduler activity
-
-With OpenTelemetry, you can connect these signals to analyze a single request end-to-end:
-
-- Visualize execution timelines across internal services and external dependencies
-- Measure latency of SQL queries and Redis commands per invocation
-- Detect goroutine leaks, contention, and scheduling delays
-- Understand memory allocation patterns and the impact of garbage collection
-- Trace retry loops, queueing, and cascading delays in complex workflows
-
-Because OpenTelemetry uses a standardized telemetry format, you can switch backends without changing your instrumentation. This unified approach provides insight into both runtime behavior and application-level activity, helping you see how the system actually performs under load.
+[OpenTelemetry (OTel)](https://signoz.io/opentelemetry/), an open-source observability framework for generating and exporting metrics, traces, and logs, addresses these limitations. It provides a consistent way to instrument Go applications, supports end-to-end request tracing, captures runtime behaviour, and correlates business-level events with system metrics. With growing support for auto-instrumentation and standardised APIs, OTel fills gaps that a metrics-only approach cannot cover, giving teams a complete view of both application performance and operational health.
 
 ## Set Up Monitoring in Go Applications using OpenTelemetry
 Follow the below steps to monitor your Go application with OpenTelemetry, in this article we are using a sample [E-commerce Go Application](https://github.com/aayush-signoz/go-otel-ecommerce.git) demonstrating:
@@ -81,23 +30,24 @@ Follow the below steps to monitor your Go application with OpenTelemetry, in thi
 - **Redis** for caching  
 - **OpenTelemetry** observability (Traces, Metrics, Logs)  
 
-**Step 1: Prerequisites**
+### Step 1: Prerequisites
 
 - **[Go installed (v1.20+)](https://go.dev/doc/install)**: Required to build and run the Go application.
 - **[Git installed](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)**: Needed to clone the sample repository.
 - **[SQLite installed](https://www.sqlite.org/download.html)**: The sample app uses SQLite as its database.
 - **[Redis installed](https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/)** *(optional but recommended)*: Enables caching and helps demonstrate Redis monitoring.
+- **[SigNoz Cloud](https://signoz.io/teams/)**: A destination for your telemetry data (we will use SigNoz Cloud for the examples, but the concepts apply to any OTLP-compliant backend).
 
-**Step 2: Get a sample Go app**
+### Step 2: Get a Sample Go Application
 
-If you want to follow along with the tutorial, clone the `follow-along` branch below GitHub repository:
+If you want to follow along with the tutorial, clone the `follow-along` branch of below GitHub repository:
 
 ```bash
 git clone -b follow-along https://github.com/aayush-signoz/go-otel-ecommerce.git
 cd go-otel-ecommerce
 ```
 
-**Step 3: Install dependencies**
+### Step 3: Install Dependencies
 
 Dependencies related to **[OpenTelemetry exporter](https://signoz.io/guides/opentelemetry-collector-vs-exporter/)** and SDK have to be installed first. 
 
@@ -131,9 +81,9 @@ Run the below commands:
 - **`otlptracegrpc`**: gRPC exporter that sends traces to an OTLP backend  
 - **`otlploggrpc`**: gRPC exporter that sends logs to an OTLP backend  
 
-**Step 4: Instrument your Go application with OpenTelemetry**
+### Step 4: Instrument Your Go Application With OpenTelemetry
 
-Configure your application to send telemetry data to your observability backend. Start from initialize traces, metrics, and logs in `telemetry/otel.go`.
+Configure your application to send telemetry data to your observability backend. Start from initialising traces, metrics, and logs in `telemetry/otel.go`.
 
 **1. Tracing (`initTracer`)**
 
@@ -162,7 +112,7 @@ func InitTracer() func(context.Context) error {
 	return exporter.Shutdown
 }
 ```
-Above function initializes distributed tracing for the Golang application. It configures the trace exporter, sets up the tracing pipeline, and ensures all traces include service metadata for backend identification. It also handles secure/insecure modes depending on environment and returns a shutdown handler that flushes buffered spans on exit.
+Above function initialises distributed tracing for the Golang application. It configures the trace exporter, sets up the tracing pipeline, and ensures all traces include service metadata for backend identification. It also handles secure/insecure modes depending on environment and returns a shutdown handler that flushes buffered spans on exit.
 - `otlptracegrpc.New()`: creates a gRPC OTLP trace exporter for sending spans.
 - **Security Mode**
   - When `config.Insecure == "false"`: communication is encrypted using TLS.
@@ -226,7 +176,7 @@ func InitMeter() func(context.Context) error {
 
 Above function configures metric exporting for your Go service. It creates a gRPC-based OTLP metrics exporter, sets up a periodic reader to push data every 10s, registers application-level counters for business logic and HTTP requests, and exposes Go runtime telemetry such as memory allocation and goroutine count.
 
-- `otlpmetricgrpc.New()`: initializes the OTLP metric exporter over gRPC.
+- `otlpmetricgrpc.New()`: initialises the OTLP metric exporter over gRPC.
 - `sdkmetric.NewMeterProvider()`: central engine for emitting and managing metrics.
 - `sdkmetric.WithPeriodicReader(...10s)`: batches and exports metrics every 10 seconds.
 - `otel.SetMeterProvider()`: sets this meter provider as global for the entire process.
@@ -305,7 +255,7 @@ import (
 
 After adding all of the above integrations in `otel.go`, it should look like [this](https://github.com/aayush-signoz/go-otel-ecommerce/blob/main/telemetry/otel.go). 
 
-**Step 5: Initialize Tracing, Metrics & Logging in `main.go`**
+### Step 5: Initialize Tracing, Metrics & Logging in `main.go`
 
 We now wire everything together by initializing the telemetry components at the very start of the `main()` function in `main.go`. This ensures every request, log, and metric in the application is captured from the moment the service starts.
 
@@ -320,11 +270,11 @@ We now wire everything together by initializing the telemetry components at the 
 	defer meterShutdown(context.Background())
 ```
 
-Above code initializes OpenTelemetry tracing, logging, and metrics for the application, and ensures that all pending telemetry data is flushed properly when the program exits.
+Above code initialises OpenTelemetry tracing, logging, and metrics for the application, and ensures that all pending telemetry data is flushed properly when the program exits.
 
 After adding all of the above integrations in `main.go`, it should look like [this](https://github.com/aayush-signoz/go-otel-ecommerce/blob/main/main.go). 
 
-**Step 6: Declare environment variables for configuring OpenTelemetry**
+### Step 6: Declare Environment Variables
 
 Declare the following global variables in the `config/config.go` file. These will be used to configure OpenTelemetry and other service settings:
 
@@ -349,36 +299,7 @@ Make sure to import the variables in all the paths needed, such as `telemetry/ot
 go mod tidy
 ```
 
-**Step 7: Connecting a Backend - SigNoz**
-
-SigNoz cloud is the easiest way to run SigNoz. You can sign up [**here**](https://signoz.io/teams/) for a free account and get 30 days of unlimited access to all features.
-
-![https://signoz.io/img/launch_week/try-signoz-cloud-blog-cta.png](https://signoz.io/img/launch_week/try-signoz-cloud-blog-cta.png)
-
-After you sign up and verify your email, you will be provided with details of your SigNoz cloud instance. Once you set up your password and log in, you will be greeted with the following onboarding screen.
-
-<figure data-zoomable align='center'>
-<img src="https://signoz.io/img/opentelemetry/2024/06/onboarding-screen.webp" alt="Onboarding screen in SigNoz"/>
-<figcaption><i>Onboarding screen in SigNoz</i></figcaption>
-</figure>
-
-Since we will be following instructions from the tutorial, you can skip onboarding by clicking on the SigNoz logo.
-
-You will see the below screen:
-
-<figure data-zoomable align='center'>
-<img src="/img/blog/2024/12/services-tab.webp" alt="Services tab in SigNoz"/>
-<figcaption><i>Services tab in SigNoz</i></figcaption>
-</figure>
-
-For sending data to SigNoz cloud, you will be needing details like [ingestion key](https://signoz.io/docs/ingestion/signoz-cloud/keys/) and region. You can find them under **`Ingestion Settings`** under **`Settings`**.
-
-<figure data-zoomable align='center'>
-<img src="/img/blog/2024/12/ingestion-settings.webp" alt="ingestion settings"/>
-<figcaption><i>Ingestion details for your SigNoz cloud account</i></figcaption>
-</figure>
-
-**Step 8: Start Redis (required for app caching & Redis spans)**
+### Step 7: Start Redis for Caching
 
 This sample application uses Redis to cache frequently accessed data (like inventory and product availability), and these Redis operations also appear in your traces.
 
@@ -403,11 +324,13 @@ You should see:
 redis:7   0.0.0.0:6379->6379/tcp
 ```
 
-**Step 9: Running the Application**
+### Step 8: Running the Application
 
-Now that you have structured and instrumented your Go application with OpenTelemetry, you need to set some environment variables to send telemetry data to the SigNoz backend and run your application.
+Now that you have structured and instrumented your Go application with OpenTelemetry, you need access to some environment variables to send telemetry data to the SigNoz and run your application.
 
-Run the following command:
+For sending data to SigNoz cloud, you will be needing details like [ingestion key](https://signoz.io/docs/ingestion/signoz-cloud/keys/) and [region](https://signoz.io/docs/ingestion/signoz-cloud/overview/#endpoint). You can find them under `Workspace Settings` in `Settings`.
+
+Run the following command after fetching the above detials:
 
 ```bash
 SERVICE_NAME=goApp \ 
@@ -439,7 +362,7 @@ go run main.go
 
 You can find the complete code under the `main` branch of the sample [GitHub repository](https://github.com/aayush-signoz/go-otel-ecommerce/#main).
 
-## Generate Telemetry Data from Application
+## Interact with the Application to Produce Telemetry
 
 To ensure telemetry data is generated and sent to SigNoz, interact with your Go ecommerce application by hitting its endpoints. You can do this by navigating to `http://localhost:8080` in your browser or using a tool like `curl` or Postman.
 
@@ -447,7 +370,7 @@ Refresh the endpoints multiple times to simulate load. Wait for 1–2 minutes, a
 
 Below are examples to interact with the ecommerce app:
 
-1. **Retrieve All Products**
+### 1. Retrieve All Products
 
 Send a GET request to fetch the list of products:
 
@@ -476,7 +399,7 @@ curl http://localhost:8080/products
 <figcaption><i>Listed all products</i></figcaption>
 </figure>
 
-2. **Create a New Order**
+### 2. Create a New Order
 
 Send a POST request to add a new order:
 
@@ -505,7 +428,7 @@ curl -X POST http://localhost:8080/orders \
 <figcaption><i>Created a new order</i></figcaption>
 </figure>
 
-3. **Check Inventory**
+### 3. Check Inventory
 
 Send a GET request to check inventory status:
 
@@ -526,7 +449,7 @@ curl http://localhost:8080/checkInventory
 - Simulates inventory check with a random delay (100–400ms).
 - **Telemetry**: Each request generates HTTP metrics, logs for inventory checks, and trace spans capturing the delay.
 
-4. **CPU Load Test**
+### 4. CPU Load Test
 
 Send a GET request to simulate CPU-intensive work:
 
@@ -544,7 +467,7 @@ curl http://localhost:8080/cpuTest
 - Performs a heavy CPU calculation to simulate load.
 - **Telemetry**: Observe CPU-bound spans and increased `goroutine/memory` metrics on your SigNoz dashboard.
 
-5. **Concurrency Test**
+### 5. Concurrency Test
 
 Send a GET request to simulate high concurrency:
 
@@ -565,8 +488,6 @@ curl http://localhost:8080/concurrencyTest
 By performing these interactions, your application will generate telemetry data, which OpenTelemetry will process and forward to SigNoz for visualization and analysis. Refresh your SigNoz dashboard to observe the metrics, traces, and logs created during these operations!
 
 ## Monitor your Go application with SigNoz dashboards
-With the above steps, you have instrumented your Go application with OpenTelemetry. OpenTelemetry sends the collected data to SigNoz which can be used to store it and visualize it. Let’s see how SigNoz can help you monitor your Go application.
-
 To see meaningful results in SigNoz, we need the application to actually process requests, otherwise there’s nothing for OpenTelemetry to capture. Since we are using a local sample app without real users, we need to generate synthetic traffic to simulate real-world API usage. Once the application is running, simply execute the provided **`generate_traffic.sh`** script to start producing telemetry data that you can immediately observe inside SigNoz using the below command:
 
 ```bash
@@ -574,7 +495,7 @@ chmod +x generate_traffic.sh
 ./generate_traffic.sh
 ```
 
-The script repeatedly calls the /products, /orders, /checkInventory, /cpuTest, and /concurrencyTest endpoints, generating traces, metrics, and logs. This simulates real user activity, allowing SigNoz to visualize request latency, business metrics, and Go runtime behavior in real time.
+The script repeatedly calls the `/products`, `/orders`, `/checkInventory`, `/cpuTest`, and `/concurrencyTest` endpoints, generating traces, metrics, and logs. This simulates real user activity, allowing SigNoz to visualize request latency, business metrics, and Go runtime behavior in real time.
 
 Navigate to our SigNoz cloud account. On the service page, you should see your **`goApp`** service.
 
@@ -596,67 +517,67 @@ Click on the **`goApp`** service and you should be redirected to the metrics pag
 <figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
 </figure>
 
-**1. Goroutines**
+### System & Infrastructure Metrics
+
+### Goroutines
 Shows the number of active goroutines in your application. Tracking goroutine counts helps identify concurrency spikes, leaks, or unusually high thread usage.
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-goroutines.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-goroutines.webp" alt="`goroutines` metric on SigNoz"/>
+<figcaption><i>Monitoring `goroutines` from the sample golang application</i></figcaption>
 </figure>
 
-**2. Heap Memory Usage**
+### Heap Memory Usage
 Reflects the bytes currently allocated on the Go heap. Monitoring this helps understand memory consumption patterns and the impact of garbage collection.
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-gomemory.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-gomemory.webp" alt="`go memory` metric on SigNoz"/>
+<figcaption><i>Monitoring Heap memory from the sample golang application</i></figcaption>
 </figure>
 
-**3. Request Latency & Throughput**
+### Request Latency & Throughput
 - Latency: How long each request takes to complete. SigNoz shows percentiles like p50, p90, and p99 to highlight slow requests.
 - Throughput: Number of requests served per second, helping understand application load handling.
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-latency.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-latency.webp" alt="Request Latency & Throughput on SigNoz"/>
+<figcaption><i>Monitoring latency and throughput from the sample golang application</i></figcaption>
 </figure>
 
-**4. Business-Level Metrics**
+### Application & Business Metrics
+
+### Business Counters
 Custom counters representing real user actions (e.g., orders_total, product_order_total) give visibility into business events alongside system metrics.
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-orders-total.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-orders-total.webp" alt="Custom metrics from Go app"/>
+<figcaption><i>Monitoring `orders_total` metrics from the sample golang application.</i></figcaption>
 </figure>
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-products-total.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-products-total.webp" alt="Custom metrics from Go app"/>
+<figcaption><i>Monitoring `product_order_total` metrics from the sample golang application.</i></figcaption>
 </figure>
 
-**5. Tracing & Logs**
+### Tracing & Logs
 Traces visualize the execution path of requests across HTTP handlers, database calls, and Redis operations. Logs enriched with trace_id and span_id can be directly correlated to traces, simplifying debugging.
 - Traces: Spans from otelgin.Middleware and manual spans in handlers (e.g., db_process_order)
 - Logs: Structured logs enriched via otellogrus hook
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-trace.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-trace.webp" alt="Traces from Go app"/>
+<figcaption><i>Traces tab for golang application on SigNoz</i></figcaption>
 </figure>
 
 <figure data-zoomable align='center'>
-<img src="/img/blog/2025/11/go-monitoring-logs.webp" alt="Metrics from Go app"/>
-<figcaption><i>Monitor your Go application metrics like application latency, requests per second, error percentage, etc.</i></figcaption>
+<img src="/img/blog/2025/11/go-monitoring-logs.webp" alt="Logs from Go app"/>
+<figcaption><i>Logs tab for golang application on SigNoz</i></figcaption>
 </figure>
 
 ## Conclusion
-By using OpenTelemetry libraries, you can instrument Go services with traces, metrics, and logs in a consistent way. Pairing that with SigNoz gives you the visibility needed to understand how your application behaves in production, track performance issues, and monitor user-impacting latency.
+By using OpenTelemetry libraries, you can instrument Go services with traces, metrics, and logs in a consistent way. Pairing that with [SigNoz Cloud](https://signoz.io/teams/) gives you the visibility needed to understand how your application behaves in production, track performance issues, and monitor user-impacting latency.
 
 OpenTelemetry is supported by a strong community and continues to expand across frameworks and ecosystems. This makes it a reliable foundation for observability across distributed components and multi-service environments.
-
-SigNoz provides an open-source tool that you can self-host or use through a managed option. To explore it further, you can check out the SigNoz GitHub repository 👇
-
-![https://signoz.io/img/blog/common/signoz_github.webp](https://signoz.io/img/blog/common/signoz_github.webp)
 
 If you want to read more about how to integrate Traces and Logs using Golang 👇
 
