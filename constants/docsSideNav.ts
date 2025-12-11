@@ -580,6 +580,7 @@ const docsSideNav = [
         type: 'category',
         isExpanded: false,
         label: 'Kubernetes',
+        route: '/docs/opentelemetry-collection-agents/k8s/get-started',
         items: [
           {
             type: 'category',
@@ -844,6 +845,12 @@ const docsSideNav = [
           },
           {
             type: 'doc',
+            label: 'Switch to Collector',
+            route:
+              '/docs/opentelemetry-collection-agents/opentelemetry-collector/switch-to-collector',
+          },
+          {
+            type: 'doc',
             label: 'Why Use Collector',
             route:
               '/docs/opentelemetry-collection-agents/opentelemetry-collector/why-to-use-collector',
@@ -985,9 +992,17 @@ const docsSideNav = [
             ],
           },
           {
-            type: 'doc',
+            type: 'category',
+            isExpanded: false,
             label: 'Golang',
             route: '/docs/instrumentation/opentelemetry-golang',
+            items: [
+              {
+                type: 'doc',
+                label: 'Manual Instrumentation',
+                route: '/docs/instrumentation/manual-instrumentation/golang/manual-instrumentation',
+              },
+            ],
           },
           {
             type: 'doc',
@@ -1311,6 +1326,11 @@ const docsSideNav = [
               },
               {
                 type: 'doc',
+                route: '/docs/logs-management/send-logs/nodejs-logs',
+                label: 'Node.js logs',
+              },
+              {
+                type: 'doc',
                 route: '/docs/logs-management/send-logs/nodejs-pino-logs',
                 label: 'Pino Node.js logs',
               },
@@ -1318,6 +1338,11 @@ const docsSideNav = [
                 type: 'doc',
                 route: '/docs/logs-management/send-logs/nodejs-winston-logs',
                 label: 'Winston Node.js logs',
+              },
+              {
+                type: 'doc',
+                route: '/docs/logs-management/send-logs/opentelemetry-nodejs-bunyan-logs',
+                label: 'Bunyan Node.js logs',
               },
             ],
           },
@@ -1544,6 +1569,19 @@ const docsSideNav = [
         route: '/docs/metrics-management/send-metrics',
         items: [
           {
+            type: 'category',
+            label: 'Application Metrics',
+            route: '/docs/metrics-management/send-metrics#applications',
+            isExpanded: false,
+            items: [
+              {
+                type: 'doc',
+                route: '/docs/metrics-management/send-metrics/applications/golang',
+                label: 'Golang',
+              },
+            ],
+          },
+          {
             type: 'doc',
             route: '/docs/userguide/otel-metrics-receivers',
             label: 'OpenTelemetry Receivers',
@@ -1565,8 +1603,18 @@ const docsSideNav = [
               },
               {
                 type: 'doc',
+                route: '/docs/userguide/envoy-metrics',
+                label: 'Envoy Metrics',
+              },
+              {
+                type: 'doc',
                 route: '/docs/tutorial/traefik-observability',
                 label: 'Traefik Observability',
+              },
+              {
+                type: 'doc',
+                route: '/docs/metrics-management/fly-metrics',
+                label: 'Fly.io metrics',
               },
             ],
           },
@@ -1711,6 +1759,11 @@ const docsSideNav = [
             route: '/docs/userguide/manage-variables',
             label: 'Manage Variables',
           },
+          {
+            type: 'doc',
+            route: '/docs/dashboards/terraform-provider-signoz',
+            label: 'Terraform Provider',
+          },
         ],
       },
       {
@@ -1803,12 +1856,27 @@ const docsSideNav = [
                 route: '/docs/dashboards/dashboard-templates/db-calls-monitoring',
                 label: 'DB Calls Monitoring',
               },
+              {
+                type: 'doc',
+                route: '/docs/dashboards/dashboard-templates/http-api-monitoring',
+                label: 'HTTP API Monitoring',
+              },
             ],
+          },
+          {
+            type: 'doc',
+            route: '/docs/dashboards/dashboard-templates/argocd-dashboard',
+            label: 'ArgoCD',
           },
           {
             type: 'doc',
             route: '/docs/dashboards/dashboard-templates/autogen-dashboard',
             label: 'Autogen',
+          },
+          {
+            type: 'doc',
+            route: '/docs/dashboards/dashboard-templates/aws-sqs-prometheus',
+            label: 'AWS SQS',
           },
           {
             type: 'doc',
@@ -1818,12 +1886,17 @@ const docsSideNav = [
           {
             type: 'doc',
             route: '/docs/dashboards/dashboard-templates/cicd',
-            label: 'CICD',
+            label: 'CI/CD',
           },
           {
             type: 'doc',
             route: '/docs/dashboards/dashboard-templates/claude-code-dashboard',
             label: 'Claude Code',
+          },
+          {
+            type: 'doc',
+            route: '/docs/dashboards/dashboard-templates/cost-meter',
+            label: 'Cost Meter',
           },
           {
             type: 'doc',
@@ -1875,6 +1948,11 @@ const docsSideNav = [
           },
           {
             type: 'doc',
+            route: '/docs/dashboards/dashboard-templates/go-runtime-metrics',
+            label: 'Go Runtime',
+          },
+          {
+            type: 'doc',
             route: '/docs/dashboards/dashboard-templates/jvm-metrics',
             label: 'JVM',
           },
@@ -1905,6 +1983,11 @@ const docsSideNav = [
             type: 'doc',
             route: '/docs/dashboards/dashboard-templates/key-operations',
             label: 'Key Operations',
+          },
+          {
+            type: 'doc',
+            route: '/docs/dashboards/dashboard-templates/livekit-dashboard',
+            label: 'LiveKit',
           },
           {
             type: 'doc',
@@ -2377,6 +2460,16 @@ const docsSideNav = [
         type: 'doc',
       },
       {
+        route: '/docs/litellm-observability',
+        label: 'LiteLLM',
+        type: 'doc',
+      },
+      {
+        route: '/docs/livekit-observability',
+        label: 'LiveKit',
+        type: 'doc',
+      },
+      {
         route: '/docs/llamaindex-observability',
         label: 'LlamaIndex',
         type: 'doc',
@@ -2648,10 +2741,16 @@ const docsSideNav = [
     ],
   },
   {
-    label: 'CICD Monitoring',
+    label: 'CI/CD Monitoring',
     type: 'category',
     isExpanded: false,
+    route: '/docs/cicd/overview',
     items: [
+      {
+        type: 'doc',
+        route: '/docs/cicd/overview',
+        label: 'Overview',
+      },
       {
         label: 'GitHub',
         type: 'category',
@@ -2932,8 +3031,33 @@ const docsSideNav = [
         items: [
           {
             type: 'doc',
-            route: '/docs/migration/opentelemetry-datadog-receiver',
-            label: 'Using Datadog OTLP receiver',
+            route: '/docs/migration/migrate-from-datadog/metrics',
+            label: 'Migrating Metrics',
+          },
+          {
+            type: 'doc',
+            route: '/docs/migration/migrate-from-datadog/traces',
+            label: 'Migrating Traces',
+          },
+          {
+            type: 'doc',
+            route: '/docs/migration/migrate-from-datadog/logs',
+            label: 'Migrating Logs',
+          },
+          {
+            type: 'doc',
+            route: '/docs/migration/migrate-from-datadog/dashboards',
+            label: 'Migrating Dashboards',
+          },
+          {
+            type: 'doc',
+            route: '/docs/migration/migrate-from-datadog/alerts',
+            label: 'Migrating Alerts',
+          },
+          {
+            type: 'doc',
+            route: '/docs/migration/migrate-from-datadog/opentelemetry-datadog-receiver',
+            label: 'Using Datadog Receiver',
           },
         ],
       },
@@ -3060,22 +3184,9 @@ const docsSideNav = [
         ],
       },
       {
-        label: 'From OpenTelemetry',
-        type: 'category',
-        isExpanded: false,
+        type: 'doc',
         route: '/docs/migration/migrate-from-opentelemetry-to-signoz',
-        items: [
-          {
-            type: 'doc',
-            route: '/docs/migration/migrate-from-opentelemetry/cloud',
-            label: 'Migrate to SigNoz Cloud',
-          },
-          {
-            type: 'doc',
-            route: '/docs/migration/migrate-from-opentelemetry/self-hosted',
-            label: 'Migrate to Self-Hosted SigNoz',
-          },
-        ],
+        label: 'From OpenTelemetry',
       },
       {
         type: 'doc',

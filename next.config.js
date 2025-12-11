@@ -106,6 +106,11 @@ module.exports = () => {
           permanent: true,
         },
         {
+          source: '/docs/migration/opentelemetry-datadog-receiver/',
+          destination: '/docs/migration/migrate-from-datadog/opentelemetry-datadog-receiver/',
+          permanent: true,
+        },
+        {
           source: '/security/',
           destination: 'https://trust.signoz.io/',
           permanent: true,
@@ -151,6 +156,56 @@ module.exports = () => {
           permanent: true,
         },
         {
+          source: '/blog/getting-started-with-opentelemetry/',
+          destination: '/blog/opentelemetry-demo/',
+          permanent: true,
+        },
+        {
+          source: '/blog/opentelemetry-distributed-tracing-part-2/',
+          destination: '/blog/opentelemetry-tracing/',
+          permanent: true,
+        },
+        {
+          source: '/blog/opentelemetry-distributed-tracing-part-1/',
+          destination: '/blog/what-is-distributed-tracing-in-opentelemetry/',
+          permanent: true,
+        },
+        {
+          source: '/blog/introduction-to-opentelemetry-metrics/',
+          destination: '/blog/opentelemetry-metrics-with-examples/',
+          permanent: true,
+        },
+        {
+          source: '/blog/gathering-data-with-opentelemetry-collector/',
+          destination: '/blog/opentelemetry-collector-complete-guide/',
+          permanent: true,
+        },
+        {
+          source: '/blog/opentelemetry-nodejs/',
+          destination: '/opentelemetry/nodejs/',
+          permanent: true,
+        },
+        {
+          source: '/blog/opentelemetry-python-auto-and-manual-instrumentation/',
+          destination: '/opentelemetry/python/',
+          permanent: true,
+        },
+        {
+          source: '/blog/kubernetes-observability-with-opentelemetry/',
+          destination: '/blog/opentelemetry-kubernetes/',
+          permanent: true,
+        },
+        {
+          source: '/why-opentelemetry/',
+          destination: '/opentelemetry/',
+          permanent: true,
+        },
+        {
+          source: '/blog/what-is-opentelemetry/',
+          destination: '/opentelemetry/',
+          permanent: true,
+        },
+        {
           source: '/comparisons/',
           destination: '/resource-center/comparisons/',
           permanent: true,
@@ -163,7 +218,7 @@ module.exports = () => {
         {
           source: '/slack/',
           destination:
-            'https://join.slack.com/t/signoz-community/shared_invite/zt-3hr54hgo7-eZZHi6MRX4KodCfArtnTXA',
+            'https://join.slack.com/t/signoz-community/shared_invite/zt-3k8natdfr-ABxGO6tiB~YYXbkzzMWBMw',
           basePath: false,
           permanent: true,
         },
@@ -201,6 +256,11 @@ module.exports = () => {
         {
           source: '/docs/installation/',
           destination: '/docs/install',
+          permanent: true,
+        },
+        {
+          source: '/docs/install/cloud/',
+          destination: '/docs/cloud/',
           permanent: true,
         },
         {
@@ -269,9 +329,10 @@ module.exports = () => {
           destination: '/resource-center/blog/',
           permanent: true,
         },
+        // Keep /opentelemetry/ as the canonical hub landing instead of redirecting to the Resource Center.
         {
-          source: '/opentelemetry/',
-          destination: '/resource-center/opentelemetry/',
+          source: '/opentelemetry/series/nextjs/',
+          destination: '/blog/opentelemetry-nextjs/',
           permanent: true,
         },
         {
@@ -937,6 +998,11 @@ module.exports = () => {
           permanent: true,
         },
         {
+          source: '/docs/tutorial/setting-up-sso-saml-with-keycloak/',
+          destination: '/docs/manage/administrator-guide/sso/user-guides/saml-keycloak',
+          permanent: true,
+        },
+        {
           source: '/docs/install/troubleshooting/',
           destination: '/docs/setup/docker/troubleshooting/faq',
           permanent: true,
@@ -959,6 +1025,21 @@ module.exports = () => {
         {
           source: '/docs/integrations/aws/integration-template/',
           destination: '/docs/integrations/aws/',
+          permanent: true,
+        },
+        {
+          source: '/docs/operate/docker-standalone/',
+          destination: '/docs/install/docker/',
+          permanent: true,
+        },
+        {
+          source: '/docs/migration/migrate-from-opentelemetry/cloud/',
+          destination: '/docs/migration/migrate-from-opentelemetry-to-signoz/',
+          permanent: true,
+        },
+        {
+          source: '/docs/migration/migrate-from-opentelemetry/self-hosted/',
+          destination: '/docs/migration/migrate-from-opentelemetry-to-signoz/',
           permanent: true,
         },
       ]

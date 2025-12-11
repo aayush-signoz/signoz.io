@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import {
   SiKubernetes,
   SiPostgresql,
@@ -8,7 +10,6 @@ import {
   SiApache,
   SiNginx,
   SiRabbitmq,
-  SiApachekafka,
   SiDocker,
   SiJenkins,
   SiSnowflake,
@@ -19,6 +20,7 @@ import {
   SiAnthropic,
   SiAmazonwebservices,
   SiPydantic,
+  SiGo,
 } from 'react-icons/si'
 import {
   Monitor,
@@ -43,6 +45,7 @@ import {
   Target,
   Clock,
   Award,
+  Search,
 } from 'lucide-react'
 import IconCardGrid from '../Card/IconCardGrid'
 
@@ -145,6 +148,12 @@ const DashboardTemplatesData: IconCardData[] = [
     clickName: 'ClickHouse Dashboard Template',
   },
   {
+    name: 'Cost Meter',
+    href: '/docs/dashboards/dashboard-templates/cost-meter',
+    icon: <BarChart3 className="h-7 w-7 text-blue-500" />,
+    clickName: 'Cost Meter Dashboard Template',
+  },
+  {
     name: 'CouchDB',
     href: '/docs/dashboards/dashboard-templates/couchdb',
     icon: <Database className="h-7 w-7 text-red-500" />,
@@ -205,6 +214,12 @@ const DashboardTemplatesData: IconCardData[] = [
     href: 'https://github.com/SigNoz/dashboards/tree/main/google-gemini',
     icon: <SiGooglegemini className="h-7 w-7 text-blue-500" />,
     clickName: 'Google Gemini Dashboard Template',
+  },
+  {
+    name: 'Go Runtime',
+    href: '/docs/dashboards/dashboard-templates/go-runtime-metrics',
+    icon: <SiGo className="h-7 w-7 text-cyan-500" />,
+    clickName: 'Go Runtime Dashboard Template',
   },
   {
     name: 'Hadoop',
@@ -271,6 +286,18 @@ const DashboardTemplatesData: IconCardData[] = [
       />
     ),
     clickName: 'LiteLLM Dashboard Template',
+  },
+  {
+    name: 'LiveKit',
+    href: '/docs/dashboards/dashboard-templates/livekit-dashboard',
+    icon: (
+      <img
+        src="/svgs/icons/LLMMonitoring/livekit-icon.svg"
+        alt="LiveKit Icon"
+        className="h-7 w-7"
+      />
+    ),
+    clickName: 'LiveKit Dashboard Template',
   },
   {
     name: 'LLM Observability',
@@ -379,12 +406,39 @@ const DashboardTemplatesData: IconCardData[] = [
 ]
 
 export default function DashboardTemplatesListicle() {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredData = DashboardTemplatesData.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
-    <IconCardGrid
-      cards={DashboardTemplatesData}
-      sectionName="Dashboard Templates Section"
-      viewAllText="View all dashboard templates"
-      gridCols="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4"
-    />
+    <div className="space-y-6">
+      <div className="relative mx-auto mb-8 max-w-md">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <Search className="h-5 w-5 text-gray-400" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search dashboard templates..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-blue-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-sm"
+        />
+      </div>
+
+      {filteredData.length > 0 ? (
+        <IconCardGrid
+          cards={filteredData}
+          sectionName="Dashboard Templates Section"
+          viewAllText="View all dashboard templates"
+          gridCols="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4"
+        />
+      ) : (
+        <div className="py-8 text-center text-gray-500">
+          No dashboard templates found matching "{searchQuery}"
+        </div>
+      )}
+    </div>
   )
 }
