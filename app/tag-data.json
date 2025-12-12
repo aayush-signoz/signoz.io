@@ -38,6 +38,7 @@
   "microservices": 1,
   "docker": 6,
   "databases": 1,
+  "golang-monitoring--go-monitoring": 1,
   "ai": 1,
   "coding": 1,
   "launch-week": 6,
