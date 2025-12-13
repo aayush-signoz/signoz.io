@@ -14,9 +14,9 @@ Modern Golang applications often run in distributed environments with multiple s
 - Where did the error originate?
 - What series of events led to the failure?
 
-That's where [OpenTelemetry](https://signoz.io/opentelemetry/) becomes the difference between guessing and knowing. It is an open-source observability framework that enables applications to generate and collect telemetry data such as logs, metrics, and traces in a standardized format across many languages and platforms.
+That's where [OpenTelemetry](https://signoz.io/opentelemetry/) becomes the difference between guessing and knowing. It is an unified observability framework that enables applications to generate and collect telemetry data such as logs, metrics, and traces in a standardized format across many languages and platforms.
 
-In this tutorial, we will use the OpenTelemetry Golang libraries to instrument a Golang application and then visualize it with an open-source observability tool - [**SigNoz**](https://signoz.io/).
+In this tutorial, we will use the OpenTelemetry Golang libraries to instrument a Golang application and then visualize it with an unified observability platform - [**SigNoz**](https://signoz.io/).
 
 Steps to get started with OpenTelemetry for Go applications:
 
@@ -63,7 +63,7 @@ Run the commands below after navigating to the application source folder:
   go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc
 ```
 
-<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={true}>
 - **`otel`**: Core OpenTelemetry APIs for Go
 - **`otel/trace`**: Tracing interfaces and utilities
 - **`otel/sdk`**: SDK implementation for telemetry
@@ -110,7 +110,7 @@ import (
 )
 ```
 
-<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={true}>
 - **`attribute`**: Used to attach useful descriptive data to spans, like `user_id`, `region`, and `request_type`, making traces meaningful and searchable.
 - **`resource`**: Stores information about what is producing telemetry, such as `service name`, `environment (prod/staging)`, `version`, and `container ID`, etc.
 - **`sdktrace`**: Used to create, manage and sample spans, and sends them to the tracing backend.
@@ -172,7 +172,7 @@ func initTracer() func(context.Context) error {
 
 The function above configures OpenTelemetry tracing for your Go service. It creates the OTLP exporter that pushes traces to your collector and assigns metadata. Hence, the backend knows which service the traces belong to and configures the tracer provider to sample, batch, and manage spans efficiently. It also returns a shutdown function that flushes all pending traces when the app stops.
 
-<KeyPointCallout title="Functions and Keywords Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Functions and Keywords Breakdown" defaultCollapsed={true}>
 - **`otlptrace.New`**: creates the OTLP trace exporter
 - **`resource.WithAttributes`**: defines service metadata (`service.name`, etc.)
 - **`sdktrace.NewTracerProvider`**: main engine for tracing in the app
@@ -334,6 +334,11 @@ func main() {
 }
 ```
 
+If you still face any dependencies related error, run the below command to install all the dependencies:
+```go
+go mod tidy
+```
+
 ### Step 8: Run your Go Gin application
 
 Now that youhave fully set up the application, it's time to run some CRUD operations. Run the following command to set the environment variables and start the application:
@@ -439,7 +444,17 @@ Output:
 
 By performing these interactions, your application will generate telemetry data, which OpenTelemetry will process and forward to an observability backend for visualization and analysis. 
 
-## Monitor your Go application with SigNoz dashboards
+## Monitor your Go application
+
+### Setting up SigNoz
+
+You can choose between various deployment options in SigNoz. The easiest way to get started with SigNoz is [**SigNoz cloud**](https://signoz.io/teams/). We offer a 30-day free trial account with access to all features.
+
+Those who have data privacy concerns and can't send their data outside their infrastructure can sign up for either [**enterprise self-hosted or BYOC offering**](https://signoz.io/contact-us/).
+
+Those who have the expertise to manage SigNoz themselves or just want to start with a free self-hosted option can use our [**community edition**](https://signoz.io/docs/install/self-host/).
+
+### Visualizing with SigNoz
 
 With the above steps, you have instrumented your Go application with OpenTelemetry. Let’s see how SigNoz can help you monitor your Go application. 
 
@@ -556,32 +571,11 @@ In this example, an event named **`"This is a sample event"`** is added to the s
 
 **Implementation in your `goGin` Application**
 
-In your project folder directory, open the **`controllers/books.go`** file and update it with the following configuration:
+In your project folder directory, open the **`controllers/books.go`** file and add the above configuration in the function blocks:
 
 ```go
-package controllers
+...
 
-import (
-    "net/http"
-
-    "github.com/SigNoz/sample-golang-app/models"
-    "github.com/gin-gonic/gin"
-    "go.opentelemetry.io/otel/attribute"
-    "go.opentelemetry.io/otel/trace"
-)
-
-type CreateBookInput struct {
-    Title  string `json:"title" binding:"required"`
-    Author string `json:"author" binding:"required"`
-}
-
-type UpdateBookInput struct {
-    Title  string `json:"title"`
-    Author string `json:"author"`
-}
-
-// GET /books
-// Find all books
 func FindBooks(c *gin.Context) {
     span := trace.SpanFromContext(c.Request.Context())
     span.SetAttributes(attribute.String("controller", "books"))
