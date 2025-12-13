@@ -79,7 +79,7 @@ Run the commands below:
   go get go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc@latest
 ```
 
-<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Dependencies Breakdown" defaultCollapsed={true}>
 - **`otel`**: Core OpenTelemetry API for Go  
 - **`otel/attribute`**: Attribute key-value system used for spans, metrics, and logs  
 - **`otel/metric`**: API for creating counters, histograms, gauges  
@@ -128,7 +128,7 @@ func InitTracer() func(context.Context) error {
 
 The function above initialises distributed tracing for the Golang application. It configures the trace exporter, sets up the tracing pipeline, and ensures all traces include service metadata for backend identification. It also handles secure/insecure modes depending on the environment and returns a shutdown handler that flushes buffered spans on exit. With this in place, the application can produce traces, including nested spans, and request timings. Flamegraphs and timelines become available inside your tracing UI.
 
-<KeyPointCallout title="Function Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Function Breakdown" defaultCollapsed={true}>
 - `otlptracegrpc.New()`: creates a gRPC OTLP trace exporter for sending spans.
 - **Security Mode**
   - When `config.Insecure == "false"`: communication is encrypted using TLS.
@@ -191,7 +191,7 @@ func InitMeter() func(context.Context) error {
 
 The above function configures metric exporting for your Go service. It creates a gRPC-based OTLP metrics exporter, sets up a periodic reader to push data every 10s, registers application-level counters for business logic and HTTP requests, and exposes Go runtime telemetry such as memory allocation and goroutine count. It gives you both business-level telemetry and Go runtime behaviour in real time.
 
-<KeyPointCallout title="Function Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Function Breakdown" defaultCollapsed={true}>
 - `otlpmetricgrpc.New()`: initializes the OTLP metric exporter over gRPC.
 - `sdkmetric.NewMeterProvider()`: central engine for emitting and managing metrics.
 - `sdkmetric.WithPeriodicReader(...10s)`: batches and exports metrics every 10 seconds.
@@ -239,7 +239,7 @@ func InitLogger() func(context.Context) error {
 
 The above function wires OpenTelemetry logging into the application. It configures an OTLP log exporter, creates a LoggerProvider that batches logs, and attaches a Logrus hook so log statements automatically include trace and span metadata.
 
-<KeyPointCallout title="Function Breakdown" defaultCollapsed={false}>
+<KeyPointCallout title="Function Breakdown" defaultCollapsed={true}>
 - `otlploggrpc.New()`: creates gRPC exporter for logs.
 - `Secure vs Insecure mode`: TLS for production, insecure for development.
 - `otel_log.NewLoggerProvider()`: provider for structured logs.
@@ -312,7 +312,9 @@ var (
 | `Insecure` | `"true"` to skip TLS for OTLP, `"false"` for secure connection |
 | `RedisAddr` | Redis server address  |
 
-Make sure to import the variables in all the paths that need them, such as `telemetry/otel.go`, `main.go`, and more. If you still face any dependency-related errors, try running the following to install all the required dependencies:
+**NOTE: Make sure to import the variables in all the paths that need them, such as `telemetry/otel.go`, `main.go`, and more.** 
+
+If you still face any dependency-related errors, try running the following to install all the required dependencies:
 ```bash
 go mod tidy
 ```
@@ -329,7 +331,7 @@ services:
   redis:
     image: redis:7
     ports:
- - "6379:6379"
+      - "6379:6379"
 ```
 
 Run Redis using the below command:
@@ -351,13 +353,10 @@ For sending data to SigNoz cloud, you will need details like [ingestion key](htt
 Run the following command after fetching the above details:
 
 ```bash
-SERVICE_NAME=goApp \ 
-INSECURE_MODE=false \ 
-REDIS_ADDR=<REDIS-ADDRESS> \  ## Default: 127.0.0.1:6379
-OTEL_EXPORTER_OTLP_HEADERS="signoz-ingestion-key=<SIGNOZ-INGESTION-KEY>" \ 
-OTEL_EXPORTER_OTLP_ENDPOINT=ingest.{region}.signoz.cloud:443 \ 
-go run main.go
+SERVICE_NAME=goApp INSECURE_MODE=false REDIS_ADDR=<REDIS-ADDRESS>  OTEL_EXPORTER_OTLP_HEADERS="signoz-ingestion-key=<SIGNOZ-INGESTION-KEY>" OTEL_EXPORTER_OTLP_ENDPOINT=ingest.{region}.signoz.cloud:443 go run main.go
 ```
+
+**NOTE - Default redis address: 127.0.0.1:6379**
 
 | Region | Endpoint |
 |--------|----------|
